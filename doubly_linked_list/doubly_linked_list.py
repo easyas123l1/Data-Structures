@@ -146,5 +146,5 @@ class DoublyLinkedList:
             if current.value > max_value:
                 max_value = current.value
             current = current.next
-​
+            
         return max_value
