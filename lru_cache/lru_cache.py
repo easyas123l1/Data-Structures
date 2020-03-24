@@ -1,3 +1,5 @@
+from doubly_linked_list import ListNode, DoublyLinkedList
+
 class LRUCache:
     """
     Our LRUCache class keeps track of the max number of nodes it
@@ -7,7 +9,10 @@ class LRUCache:
     to every node stored in the cache.
     """
     def __init__(self, limit=10):
-        pass
+        self.limit = limit
+        self.size = 0
+        self.list = DoublyLinkedList()
+        self.cache = dict()
 
     """
     Retrieves the value associated with the given key. Also
@@ -17,7 +22,17 @@ class LRUCache:
     key-value pair doesn't exist in the cache.
     """
     def get(self, key):
-        pass
+        # check if key is in cache
+        if key in self.cache.keys():
+            # cache is holding reference to node
+            node = self.cache[key]
+            # move the node to the head because its being accessed
+            self.list.move_to_front(node)
+            # return value of node
+            return node.value[1]
+        else: 
+            # key doesn't exist return None
+            return None
 
     """
     Adds the given key-value pair to the cache. The newly-
@@ -30,4 +45,23 @@ class LRUCache:
     the newly-specified value.
     """
     def set(self, key, value):
-        pass
+        # check if key is in cache
+        if key in self.cache.keys():
+            # the cache is holding a reference to the node
+            node = self.cache[key]
+            # update the exisitng node's value
+            node.value = (key, value)
+            # move the node to the head because its being accessed
+            self.list.move_to_front(node)
+        else:
+            # check to see if the limit is reached
+            if self.size == self.limit:
+                # delete the oldest from the cache
+                del self.cache[self.list.remove_from_tail()[0]]
+                self.size -= 1
+            # Add the new node to the head
+            node =  (key, value)
+            self.list.add_to_head(node)
+            # set the cache to reference the node
+            self.cache[key] = self.list.head
+            self.size += 1
