@@ -45,4 +45,23 @@ class LRUCache:
     the newly-specified value.
     """
     def set(self, key, value):
-        pass
+        # check if key is in cache
+        if key in self.cache.keys():
+            # the cache is holding a reference to the node
+            node = self.cache[key]
+            # update the exisitng node's value
+            node.value = (key, value)
+            # move the node to the head because its being accessed
+            self.list.move_to_front(node)
+        else:
+            # check to see if the limit is reached
+            if self.size == self.limit:
+                # delete the oldest from the cache
+                del self.cache[self.list.remove_from_tail()[0]]
+                self.size -= 1
+            # Add the new node to the head
+            node =  (key, value)
+            self.list.add_to_head(node)
+            # set the cache to reference the node
+            self.cache[key] = self.list.head
+            self.size += 1
