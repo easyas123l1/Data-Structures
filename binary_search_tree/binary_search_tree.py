@@ -73,8 +73,8 @@ class BinarySearchTree:
             return
         
         def for_each_node(node):
-            if node.value is not None:
-                cb(node.value)
+            #if node.value is not None:
+            cb(node.value)
             
             if node.left is not None:
                 for_each_node(node.left)
